@@ -13,6 +13,10 @@ function yum() {
 
 # Add installation packages ...
 addpkgs="
+ tar
+ bridge-utils
+ iptables-services
+
  lxc
  lxc-templates
  lxc-extra
