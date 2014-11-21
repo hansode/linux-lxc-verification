@@ -17,6 +17,8 @@ addpkgs="
  bridge-utils
  iptables-services
 
+ net-tools
+
  lxc
  lxc-templates
  lxc-extra
