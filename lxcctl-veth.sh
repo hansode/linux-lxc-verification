@@ -30,7 +30,7 @@ lxc.network.flags = up
 lxc.network.link = lxcbr0
 lxc.network.name = eth0
 lxc.network.mtu = 1472
-lxc.network.hwaddr = fe:e5:14:60:81:18
+#lxc.network.hwaddr = fe:e5:14:60:81:18
 lxc.rootfs = ${rootfs_path}
 lxc.rootfs.mount = ${rootfs_path}
 
