@@ -105,7 +105,7 @@ echo ct${ctid}.$(hostname) > ${rootfs_path}/etc/hostname
 
 ### post-install/execscript
 
-[[ -d ${rootfs_path}/lib/modules ]] || mkdir -p ${rootfs_path}/lib/modules
+mkdir -p ${rootfs_path}/lib/modules
 rsync -ax /lib/modules/$(uname -r) ${rootfs_path}/lib/modules/
 
 mount -o bind /proc ${rootfs_path}/proc
