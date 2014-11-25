@@ -92,10 +92,10 @@ function install_ifcfg() {
 LANG=C
 LC_ALL=C
 
-ctid=${1:-101}
-rootpass=${rootpass:-root}
+declare ctid=${1:-101}
+declare rootpass=${rootpass:-root}
 
-rootfs_path=/var/lib/lxc/${ctid}/rootfs
+readonly rootfs_path=/var/lib/lxc/${ctid}/rootfs
 
 ### create container
 
