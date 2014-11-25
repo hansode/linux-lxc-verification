@@ -64,3 +64,6 @@ systemctl enable  network.service
 #service network restart
 
 reboot
+# after rebooting (run "reboot in vm), /vargrant is not mounted.
+# *** work-around ***
+# > sudo mount -t vboxsf -o uid=vagrant,gid=vagrant vagrant /vagrant
