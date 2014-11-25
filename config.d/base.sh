@@ -29,7 +29,10 @@ EOS
 
 ##
 
-sed -i 's,^net.ipv4.ip_forward.+,net.ipv4.ip_forward = 1,' /etc/sysctl.conf
+# ip-forward
+cat <<EOS > /etc/sysctl.d/enable-ip-forward.conf
+net.ipv4.ip_forward = 1
+EOS
 sysctl -p
 
 ##
