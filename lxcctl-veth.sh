@@ -100,7 +100,7 @@ readonly hostname=ct${ctid}.$(hostname)
 
 ### create container
 
-root_password=${rootpass} lxc-create -n ${ctid} -t fedora
+lxc-create -n ${ctid} -t fedora
 sed -i s,^HOSTNAME=.*,HOSTNAME=${hostname}, ${rootfs_path}/etc/sysconfig/network
 echo ${hostname} > ${rootfs_path}/etc/hostname
 
