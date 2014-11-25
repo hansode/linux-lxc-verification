@@ -127,3 +127,6 @@ lxc-start -n ${ctid} -d -l DEBUG -o /var/log/lxc/${ctid}.log
 
 lxc-device -n ${ctid} add /dev/kvm
 lxc-device -n ${ctid} add /dev/net/tun
+
+# > PTY allocation request failed on channel 0
+lxc-device -n ${ctid} add /dev/ptmx
