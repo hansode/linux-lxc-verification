@@ -101,6 +101,7 @@ readonly rootfs_path=/var/lib/lxc/${ctid}/rootfs
 
 root_password=${rootpass} lxc-create -n ${ctid} -t fedora
 sed -i s,^HOSTNAME=.*,HOSTNAME=ct${ctid}.$(hostname), ${rootfs_path}/etc/sysconfig/network
+echo ct${ctid}.$(hostname) > ${rootfs_path}/etc/hostname
 
 ### post-install/execscript
 
