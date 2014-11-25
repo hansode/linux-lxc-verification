@@ -11,7 +11,7 @@ function render_lxc_conf() {
   local ctid=${1:-101}
 
   cat <<EOS
-lxc.utsname = ct${ctid}.$(hostname)
+lxc.utsname = ${hostname}
 lxc.tty = 6
 #lxc.pts = 1024
 lxc.network.type = veth
@@ -96,12 +96,13 @@ declare ctid=${1:-101}
 declare rootpass=${rootpass:-root}
 
 readonly rootfs_path=/var/lib/lxc/${ctid}/rootfs
+readonly hostname=ct${ctid}.$(hostname)
 
 ### create container
 
 root_password=${rootpass} lxc-create -n ${ctid} -t fedora
-sed -i s,^HOSTNAME=.*,HOSTNAME=ct${ctid}.$(hostname), ${rootfs_path}/etc/sysconfig/network
-echo ct${ctid}.$(hostname) > ${rootfs_path}/etc/hostname
+sed -i s,^HOSTNAME=.*,HOSTNAME=${hostname}, ${rootfs_path}/etc/sysconfig/network
+echo ${hostname} > ${rootfs_path}/etc/hostname
 
 ### post-install/execscript
 
