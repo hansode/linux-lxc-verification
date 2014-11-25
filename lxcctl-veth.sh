@@ -7,21 +7,10 @@ set -e
 set -o pipefail
 set -x
 
-LANG=C
-LC_ALL=C
+function render_lxc_conf() {
+  local ctid=${1:-101}
 
-ctid=${1:-101}
-rootpass=${rootpass:-root}
-
-rootfs_path=/var/lib/lxc/${ctid}/rootfs
-
-### create container
-
-root_password=${rootpass} lxc-create -n ${ctid} -t fedora
-
-### render/install lxc.conf
-
-cat <<EOS > /var/lib/lxc/${ctid}/config
+  cat <<EOS
 lxc.utsname = ct${ctid}.$(hostname)
 lxc.tty = 6
 #lxc.pts = 1024
@@ -30,7 +19,7 @@ lxc.network.flags = up
 lxc.network.link = lxcbr0
 lxc.network.name = eth0
 lxc.network.mtu = 1472
-#lxc.network.hwaddr = fe:e5:14:60:81:18
+#lxc.network.hwaddr = 52:54:00:$(LANG=C LC_ALL=C date +%H:%M:%S)
 lxc.rootfs = ${rootfs_path}
 lxc.rootfs.mount = ${rootfs_path}
 
@@ -65,6 +54,54 @@ lxc.cgroup.devices.allow = c 10:200 rwm
 # nbd
 lxc.cgroup.devices.allow = c 43:* rwm
 EOS
+}
+
+function install_lxc_conf() {
+  local ctid=${1:-101}
+  local lxc_conf_path=/var/lib/lxc/${ctid}/config
+
+  render_lxc_conf  ${ctid} > ${lxc_conf_path}
+  chmod 644 ${lxc_conf_path}
+}
+
+function render_ifcfg() {
+  local ctid=${1:-101}
+
+  cat <<EOS
+DEVICE=eth0
+TYPE=Ethernet
+ONBOOT=yes
+BOOTPROTO=static
+BROADCAST=172.16.254.255
+GATEWAY=172.16.254.1
+IPADDR=172.16.254.${ctid}
+NETMASK=255.255.255.0
+MTU=1472
+EOS
+}
+
+function install_ifcfg() {
+  local ctid=${1:-101}
+  local ifcfg_path=/var/lib/lxc/${ctid}/rootfs/etc/sysconfig/network-scripts/ifcfg-eth0
+
+  render_ifcfg ${ctid} > ${ifcfg_path}
+  chmod 644 ${ifcfg_path}
+}
+
+## main
+
+LANG=C
+LC_ALL=C
+
+ctid=${1:-101}
+rootpass=${rootpass:-root}
+
+rootfs_path=/var/lib/lxc/${ctid}/rootfs
+
+### create container
+
+root_password=${rootpass} lxc-create -n ${ctid} -t fedora
+sed -i s,^HOSTNAME=.*,HOSTNAME=ct${ctid}.$(hostname), ${rootfs_path}/etc/sysconfig/network
 
 ### post-install/execscript
 
@@ -75,6 +112,11 @@ mount -o bind /proc ${rootfs_path}/proc
 #chroot ${rootfs_path} bash -c -e "yum install -y qemu-kvm qemu-img"
 chroot ${rootfs_path} bash -c -e "echo root:${rootpass} | chpasswd"
 umount ${rootfs_path}/proc
+
+###
+
+install_lxc_conf ${ctid}
+install_ifcfg    ${ctid}
 
 ### start container
 
