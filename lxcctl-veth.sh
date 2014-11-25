@@ -81,8 +81,7 @@ EOS
 }
 
 function install_ifcfg() {
-  local ctid=${1:-101}
-  local ifcfg_path=/var/lib/lxc/${ctid}/rootfs/etc/sysconfig/network-scripts/ifcfg-eth0
+  local ifcfg_path=${rootfs_path}/etc/sysconfig/network-scripts/ifcfg-eth0
 
   render_ifcfg ${ctid} > ${ifcfg_path}
   chmod 644 ${ifcfg_path}
