@@ -38,6 +38,10 @@ lxc.rootfs.mount = ${rootfs_path}
 lxc.mount.entry = proc   ${rootfs_path}/proc                   proc    defaults        0 0
 lxc.mount.entry = sysfs  ${rootfs_path}/sys                    sysfs   defaults        0 0
 
+# via https://lists.linuxcontainers.org/pipermail/lxc-users/2014-October/007907.html
+# [lxc-users] systemd's journald using 100% CPU on Debian Jessie container and Fedora 20 host
+lxc.kmsg = 0
+
 # /dev/null and zero
 lxc.cgroup.devices.allow = c 1:3 rwm
 lxc.cgroup.devices.allow = c 1:5 rwm

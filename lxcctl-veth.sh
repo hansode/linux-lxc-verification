@@ -23,6 +23,10 @@ lxc.network.mtu = 1472
 lxc.rootfs = ${rootfs_path}
 lxc.rootfs.mount = ${rootfs_path}
 
+# via https://lists.linuxcontainers.org/pipermail/lxc-users/2014-October/007907.html
+# [lxc-users] systemd's journald using 100% CPU on Debian Jessie container and Fedora 20 host
+lxc.kmsg = 0
+
 lxc.mount.entry = proc   ${rootfs_path}/proc                   proc    defaults        0 0
 lxc.mount.entry = sysfs  ${rootfs_path}/sys                    sysfs   defaults        0 0
 
